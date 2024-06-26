@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.engine import Result
 
 from core.models import Area, Vacancy, Employer
+from .shemas import AreaCreate
 import datetime
 
 from . import crud
@@ -19,10 +20,12 @@ async def parsing(params: dict, url = "https://api.hh.ru/vacancies"):
     return requests.get(url, params=params, headers=headers)
 
 async def vacancy_get_one(params: dict, session):
-    response = parsing(params = params)
+    response = await parsing(params = params)
+
+
     if response.status_code == 200:
         vacancies = response.json()
-        add_vacancy(session, vacancies['items'][0])
+        await add_vacancy(session, vacancies['items'][0])
     else:
         print(f"Ошибка: {response.status_code}, {response.text}")
     
@@ -30,13 +33,16 @@ async def vacancy_get_one(params: dict, session):
 async def add_vacancy(session, vacancy_data):
     area_data = vacancy_data['area']
     employer_data = vacancy_data['employer']
-    print(area_data)
+
+
     # area = session.query(Area).filter_by(id=area_data['id']).first()
-    area = crud.area_get_one(session= session, id = area_data['id'])
+
+    area = await crud.area_get_one(session= session, id = area_data['id'])
     if not area:
-        area = Area(id=area_data['id'], name=area_data['name'], url=area_data['url'])
+        area = AreaCreate(id=area_data['id'], name=area_data['name'], url=area_data['url'])
         
-        crud.area_create(session=session, area_in= area)
+        # area_in = AreaCreate(**area_data)
+        await crud.area_create(session=session, area_in = area)
 
     # employer = session.query(Employer).filter_by(id=employer_data['id']).first()
     # if not employer:

@@ -31,7 +31,7 @@ async def vacancy_get_all(session: AsyncSession) -> list[Area]:
     areas = result.scalars().all()
     return list(areas)
 
-async def area_create(session: AsyncSession, area_in: VacancyCreate ) -> Area: 
+async def area_create(session: AsyncSession, area_in: AreaCreate ) -> Area: 
     area_model = Area(**area_in.model_dump())
     session.add(area_model)
     await session.commit()

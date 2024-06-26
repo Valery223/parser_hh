@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing import Optional, Any
 
 from errors.validation import ValidationError
@@ -53,15 +53,13 @@ class AreaBase(BaseModel):
     name: str
     url: str
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class EmployerBase(BaseModel):
     id: str
     name: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Salary(BaseModel):
     from_: Optional[int] = None 
@@ -69,15 +67,13 @@ class Salary(BaseModel):
     currency: Optional[str] = None
     gross: Optional[bool] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Snippet(BaseModel):
     requirement: Optional[str] = None
     responsibility: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class VacancyBase(BaseModel):
     id: str
@@ -106,8 +102,7 @@ class VacancyBase(BaseModel):
     experience: Optional[dict] = None
     employment: Optional[dict] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class VacancyCreate(VacancyBase):
     pass
