@@ -51,7 +51,8 @@ class QueryParamsBase(BaseModel):
 class AreaBase(BaseModel):
     id: str
     name: str
-
+    url: str
+    
     class Config:
         orm_mode = True
 
@@ -62,11 +63,54 @@ class EmployerBase(BaseModel):
     class Config:
         orm_mode = True
 
-class VacancyBase(BaseModel):
-    id: str
-    name: str
-    area: AreaBase
-    employer: EmployerBase
+class Salary(BaseModel):
+    from_: Optional[int] = None 
+    to: Optional[int] = None
+    currency: Optional[str] = None
+    gross: Optional[bool] = None
 
     class Config:
         orm_mode = True
+
+class Snippet(BaseModel):
+    requirement: Optional[str] = None
+    responsibility: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+class VacancyBase(BaseModel):
+    id: str
+    premium: Optional[bool] = None
+    name: Optional[str] = None
+    department: Optional[str] = None
+    has_test: Optional[bool] = None
+    response_letter_required: Optional[bool] = None
+    area: Optional[AreaBase] = None
+    salary: Optional[Salary] = None
+    type: Optional[dict] = None
+    address: Optional[dict] = None
+    response_url: Optional[str] = None
+    published_at: Optional[str] = None
+    created_at: Optional[str] = None
+    archived: Optional[bool] = None
+    apply_alternate_url: Optional[str] = None
+    show_logo_in_search: Optional[bool] = None
+    insider_interview: Optional[bool] = None
+    url: Optional[str] = None
+    alternate_url: Optional[str] = None
+    snippet: Optional[Snippet] = None
+    employer: Optional[EmployerBase] = None
+    schedule: Optional[dict] = None
+    professional_roles: Optional[list] = None
+    experience: Optional[dict] = None
+    employment: Optional[dict] = None
+
+    class Config:
+        orm_mode = True
+
+class VacancyCreate(VacancyBase):
+    pass
+
+class AreaCreate(AreaBase):
+    pass
