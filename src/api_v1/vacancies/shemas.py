@@ -61,17 +61,29 @@ class EmployerBase(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-class Salary(BaseModel):
-    from_: Optional[int] = None 
-    to: Optional[int] = None
-    currency: Optional[str] = None
-    gross: Optional[bool] = None
+class SalaryBase(BaseModel):
+    salary_from: Optional[float]
+    salary_to: Optional[float]
+    currency: Optional[str]
+    gross: Optional[bool]
 
     model_config = ConfigDict(from_attributes=True)
 
 class Snippet(BaseModel):
     requirement: Optional[str] = None
     responsibility: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+class ScheduleBase(BaseModel):
+    id: str
+    name: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+class ExperienceBase(BaseModel):
+    id: str
+    name: str
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -16,7 +16,6 @@ async def parsing(params: dict, url = "https://api.hh.ru/vacancies"):
         'User-Agent': 'my-app/0.0.1'
         # "Authorization": "Bearer YOUR_OAUTH_TOKEN"
     }
-
     return requests.get(url, params=params, headers=headers)
 
 async def vacancy_get_one(params: dict, session):
@@ -25,6 +24,7 @@ async def vacancy_get_one(params: dict, session):
 
     if response.status_code == 200:
         vacancies = response.json()
+        print(vacancies)
         await add_vacancy(session, vacancies['items'][0])
     else:
         print(f"Ошибка: {response.status_code}, {response.text}")

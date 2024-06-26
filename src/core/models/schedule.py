@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .vacancy import Vacancy
 
-class Area(Base):
-    __tablename__ = 'areas'
+
+class Schedule(Base):
+    __tablename__ = 'schedules'
 
     id: Mapped[str] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column()
-    url: Mapped[str] = mapped_column()
+    name: Mapped[str | None] = mapped_column()
 
     # Связь с таблицей вакансий
-    vacancies: Mapped[list["Vacancy"]] = relationship(back_populates="area")
+    vacancies: Mapped[list["Vacancy"]] = relationship(back_populates="schedule")
