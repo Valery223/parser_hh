@@ -38,8 +38,8 @@ class Vacancy(Base):
     response_letter_required: Mapped[bool | None] = mapped_column()
     response_url: Mapped[str | None] = mapped_column(nullable=True)
     sort_point_distance: Mapped[str | None] = mapped_column(nullable=True)
-    published_at: Mapped[datetime.datetime | None] = mapped_column(DateTime)
-    created_at: Mapped[datetime.datetime | None] = mapped_column(DateTime)
+    published_at: Mapped[datetime.datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime.datetime | None] = mapped_column(DateTime(timezone=True))
     show_logo_in_search: Mapped[bool | None] = mapped_column(nullable=True)
 
 
@@ -63,22 +63,3 @@ class Vacancy(Base):
     salary: Mapped["Salary"] = relationship(back_populates="vacancy", foreign_keys=[salary_id])
     snippet: Mapped["Snippet"] = relationship(back_populates="vacancy", foreign_keys=[snippet_id])
     
-
-
-    
-    # employer_id: Mapped[str] = mapped_column(ForeignKey('employers.id'))
-    # schedule_id: Mapped[str | None] = mapped_column(ForeignKey('schedules.id'))
-    #
-
-    # area_id: mapped_column(int, ForeignKey("areas.id"))
-    # employer_id: mapped_column(int, ForeignKey("employers.id"))
-    # schedule_id: mapped_column(int, ForeignKey("schedules.id"))
-    # experience_id: mapped_column(int, ForeignKey("experiences.id"))
-
-
-    # area: Mapped["Area"] = relationship(back_populates="vacancies")
-    # employer = relationship("Employer")
-    # schedule = relationship("Schedule", back_populates="vacancies")
-    # experience = relationship("Experience")
-    # employment = relationship("Employment")
-    # salary = relationship("Salary", uselist=False, back_populates="vacancy")

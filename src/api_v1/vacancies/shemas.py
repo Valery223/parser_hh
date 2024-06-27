@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator, field_validator
 from typing import Optional, Any
 import datetime
 
@@ -84,38 +84,51 @@ class ExperienceBase(BaseModel):
 
 class VacancyBase(BaseModel):
     id: str
-    accept_handicapped: Optional[bool]
-    accept_incomplete_resumes: Optional[bool]
-    accept_kids: Optional[bool]
-    accept_temporary: Optional[bool]
-    allow_messages: Optional[bool]
-    alternate_url: Optional[str]
-    apply_alternate_url: Optional[str]
-    approved: Optional[bool]
-    archived: Optional[bool]
-    code: Optional[str]
-    description: Optional[str]
-    has_test: Optional[bool]
-    premium: Optional[bool]
-    name: Optional[str]
-    department: Optional[str]
-    response_letter_required: Optional[bool]
-    response_url: Optional[str]
-    sort_point_distance: Optional[str]
-    published_at: Optional[datetime.datetime]
-    created_at: Optional[datetime.datetime]
-    show_logo_in_search: Optional[bool]
-    area_id: Optional[str]
-    type_id: Optional[str]
-    employment_name: Optional[str]
-    schedule_id: Optional[str]
-    experience_id: Optional[str]
-    employer_name: Optional[str]
-    salary_id: Optional[int]
-    snippet_id: Optional[int]
+    
+    accept_handicapped: Optional[bool] = None
+    accept_incomplete_resumes: Optional[bool] = None
+    accept_kids: Optional[bool] = None
+    accept_temporary: Optional[bool] = None
+    allow_messages: Optional[bool] = None
+    alternate_url: Optional[str] = None
+    apply_alternate_url: Optional[str] = None
+    approved: Optional[bool] = None
+    archived: Optional[bool] = None
+    code: Optional[str] = None
+    description: Optional[str] = None
+    has_test: Optional[bool] = None
+    premium: Optional[bool] = None
+    name: Optional[str] = None
+    department: Optional[str] = None
+    response_letter_required: Optional[bool] = None
+    response_url: Optional[str] = None
+    sort_point_distance: Optional[str] = None
+    published_at: Optional[datetime.datetime] = None
+    created_at: Optional[datetime.datetime] = None
+    show_logo_in_search: Optional[bool] = None
+
+    #foreign keys
+    area_id: Optional[str] = None
+    type_id: Optional[str] = None
+    schedule_id: Optional[str] = None
+    experience_id: Optional[str] = None
+    employer_name: Optional[str] = None
+    employment_name: Optional[str] = None
+    salary_id: Optional[int] = None
+    snippet_id: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)
 
+    @model_validator(mode='before')
+    @classmethod
+    def extract_area_id(cls, values):
+        foreign_keys = {'area':'id', 'type' : 'id', 'schedule': 'id', 'experience' : 'id',
+                        'employer': 'name', 'employment': 'name'}
+        for k,v in foreign_keys.items():
+            obj = values.get(k)
+            if obj is not None:
+                values[k+'_'+v] = obj.get(v)
+        return values
 
 class VacancyCreate(VacancyBase):
     pass
