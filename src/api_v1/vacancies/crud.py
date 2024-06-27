@@ -24,7 +24,7 @@ from api_v1.vacancies.shemas import VacancyBase, VacancyCreate, AreaBase, AreaCr
 #     # await db.refresh(creature_model) # if in psql data maybe rework
 #     return vacancy_model
 
-async def get_one(session: AsyncSession, model: Type, key)-> Area | None:
+async def get_one(session: AsyncSession, model: Type, key)-> Type | None:
     return await session.get(model, key)
 
 # async def vacancy_get_all(session: AsyncSession) -> list[Area]:
