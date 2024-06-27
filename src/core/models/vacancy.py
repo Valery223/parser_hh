@@ -20,10 +20,6 @@ class Vacancy(Base):
     __tablename__ = 'vacancies'
 
     id: Mapped[str] = mapped_column(primary_key=True)
-
-
-
-    id: Mapped[str] = mapped_column(primary_key=True)
     accept_handicapped: Mapped[bool | None] = mapped_column()
     accept_incomplete_resumes: Mapped[bool | None] = mapped_column()
     accept_kids: Mapped[bool | None] = mapped_column()
@@ -53,7 +49,7 @@ class Vacancy(Base):
     employment_name: Mapped[str | None] = mapped_column(ForeignKey("employments.name"))
     schedule_id: Mapped[str | None] = mapped_column(ForeignKey('schedules.id'))
     experience_id: Mapped[str | None] = mapped_column(ForeignKey("experiences.id"))
-    # employment_id: Mapped[str | None] = mapped_column(ForeignKey("employments.id"))
+    employer_name: Mapped[str | None] = mapped_column(ForeignKey("employers.name"))
     salary_id: Mapped[int | None] = mapped_column(ForeignKey("salaries.id"))
     snippet_id: Mapped[int | None] = mapped_column(ForeignKey("snippets.id"))
 
@@ -64,8 +60,8 @@ class Vacancy(Base):
     employment: Mapped["Employment"] = relationship(back_populates="vacancies")
     experience: Mapped["Experience"] = relationship(back_populates="vacancies")
 
-    salary: Mapped["Salary"] = relationship(back_populates="vacancy")
-    snippet: Mapped["Snippet"] = relationship(back_populates="vacancy")
+    salary: Mapped["Salary"] = relationship(back_populates="vacancy", foreign_keys=[salary_id])
+    snippet: Mapped["Snippet"] = relationship(back_populates="vacancy", foreign_keys=[snippet_id])
     
 
 

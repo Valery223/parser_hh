@@ -25,5 +25,6 @@ router = APIRouter(tags=["Vacancies"])
 async def get_all(query: Annotated[QueryParamsBase, Depends()],
                   session: AsyncSession = Depends(db_helper.get_db)):
     params = query.model_dump(exclude_none = True)
+    print("----------------------hello1\n\n\n")
     vacancies = await service.vacancy_get_one(params, session)
     

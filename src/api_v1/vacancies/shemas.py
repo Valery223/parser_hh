@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing import Optional, Any
+import datetime
 
 from errors.validation import ValidationError
 
@@ -48,18 +49,12 @@ class QueryParamsBase(BaseModel):
         return values
 
 
-class AreaBase(BaseModel):
-    id: str
-    name: str
-    url: str
-    
-    model_config = ConfigDict(from_attributes=True)
 
 class EmployerBase(BaseModel):
     id: str
     name: str
 
-    model_config = ConfigDict(from_attributes=True)
+    
 
 class SalaryBase(BaseModel):
     salary_from: Optional[float]
@@ -89,35 +84,155 @@ class ExperienceBase(BaseModel):
 
 class VacancyBase(BaseModel):
     id: str
-    premium: Optional[bool] = None
-    name: Optional[str] = None
-    department: Optional[str] = None
-    has_test: Optional[bool] = None
-    response_letter_required: Optional[bool] = None
-    area: Optional[AreaBase] = None
-    salary: Optional[Salary] = None
-    type: Optional[dict] = None
-    address: Optional[dict] = None
-    response_url: Optional[str] = None
-    published_at: Optional[str] = None
-    created_at: Optional[str] = None
-    archived: Optional[bool] = None
-    apply_alternate_url: Optional[str] = None
-    show_logo_in_search: Optional[bool] = None
-    insider_interview: Optional[bool] = None
-    url: Optional[str] = None
-    alternate_url: Optional[str] = None
-    snippet: Optional[Snippet] = None
-    employer: Optional[EmployerBase] = None
-    schedule: Optional[dict] = None
-    professional_roles: Optional[list] = None
-    experience: Optional[dict] = None
-    employment: Optional[dict] = None
+    accept_handicapped: Optional[bool]
+    accept_incomplete_resumes: Optional[bool]
+    accept_kids: Optional[bool]
+    accept_temporary: Optional[bool]
+    allow_messages: Optional[bool]
+    alternate_url: Optional[str]
+    apply_alternate_url: Optional[str]
+    approved: Optional[bool]
+    archived: Optional[bool]
+    code: Optional[str]
+    description: Optional[str]
+    has_test: Optional[bool]
+    premium: Optional[bool]
+    name: Optional[str]
+    department: Optional[str]
+    response_letter_required: Optional[bool]
+    response_url: Optional[str]
+    sort_point_distance: Optional[str]
+    published_at: Optional[datetime.datetime]
+    created_at: Optional[datetime.datetime]
+    show_logo_in_search: Optional[bool]
+    area_id: Optional[str]
+    type_id: Optional[str]
+    employment_name: Optional[str]
+    schedule_id: Optional[str]
+    experience_id: Optional[str]
+    employer_name: Optional[str]
+    salary_id: Optional[int]
+    snippet_id: Optional[int]
 
     model_config = ConfigDict(from_attributes=True)
+
 
 class VacancyCreate(VacancyBase):
     pass
 
+class Vacancy(VacancyBase):
+    area: Optional["Area"]
+    type_: Optional["Type"]
+    employer: Optional["Employer"]
+    schedule: Optional["Schedule"]
+    employment: Optional["Employment"]
+    experience: Optional["Experience"]
+    salary: Optional["Salary"]
+    snippet: Optional["Snippet"]
+
+
+class AreaBase(BaseModel):
+    id: str
+    name: str
+    url: str
+    
+    model_config = ConfigDict(from_attributes=True)
+
 class AreaCreate(AreaBase):
     pass
+
+class Area(AreaBase):
+    vacancies: list[Vacancy] = []
+
+class EmployerBase(BaseModel):
+    id: str
+    name: str
+    url: Optional[str]
+    alternate_url: Optional[str]
+    vacancies_url: Optional[str]
+    accredited_it_employer: Optional[bool]
+    trusted: bool
+
+    model_config = ConfigDict(from_attributes=True)
+
+class EmployerCreate(EmployerBase):
+    pass
+
+class Employer(EmployerBase):
+    vacancies: list[Vacancy] = []
+
+
+class EmploymentBase(BaseModel):
+    id: Optional[str]
+    name: str
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class EmploymentCreate(EmploymentBase):
+    pass
+
+class Employment(EmploymentBase):
+    vacancies: list[Vacancy] = []
+
+
+class ExperienceBase(BaseModel):
+    id: str
+    name: Optional[str]
+
+    model_config = ConfigDict(from_attributes=True)
+
+class ExperienceCreate(ExperienceBase):
+    pass
+
+class Experience(ExperienceBase):
+    vacancies: list[Vacancy] = []
+
+class SalaryBase(BaseModel):
+    salary_from: Optional[float]
+    salary_to: Optional[float]
+    currency: Optional[str]
+    gross: Optional[bool]
+
+    model_config = ConfigDict(from_attributes=True)
+
+class SalaryCreate(SalaryBase):
+    pass
+
+class Salary(SalaryBase):
+    vacancy: Vacancy
+
+class ScheduleBase(BaseModel):
+    id: str
+    name: Optional[str]
+
+    model_config = ConfigDict(from_attributes=True)
+
+class ScheduleCreate(ScheduleBase):
+    pass
+
+class Schedule(ScheduleBase):
+    vacancies: list[Vacancy] = []
+
+class SnippetBase(BaseModel):
+    requirement: Optional[str]
+    responsibility: Optional[str]
+
+    model_config = ConfigDict(from_attributes=True)
+
+class SnippetCreate(SnippetBase):
+    pass
+
+class Snippet(SnippetBase):
+    vacancy: Vacancy
+
+
+class TypeBase(BaseModel):
+    id: str
+    name: Optional[str]
+    model_config = ConfigDict(from_attributes=True)
+
+class TypeCreate(TypeBase):
+    pass
+
+class Type(TypeBase):
+    vacancies: list[Vacancy] = []

@@ -5,6 +5,11 @@ from typing import  Optional, List
 
 from core.models.base import Base
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .vacancy import Vacancy
+
 
 class Salary(Base):
     __tablename__ = 'salaries'
@@ -17,9 +22,4 @@ class Salary(Base):
     currency: Mapped[str | None] = mapped_column(nullable=True)
     gross: Mapped[bool | None] = mapped_column(nullable=True)
 
-    # PrimaryKeyConstraint('salary_from', 'salary_to', 'currency', 'gross', name="mytable_pk"),
-    
-
-    # Связь с таблицей вакансий
-    vacancy_id: Mapped[str] = mapped_column(ForeignKey("vacancies.id"), unique=True)
-    vacancy = relationship("Vacancy", back_populates="salary")
+    vacancy: Mapped["Vacancy"] = relationship(back_populates="salary")
